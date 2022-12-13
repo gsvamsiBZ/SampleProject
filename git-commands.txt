@@ -1,8 +1,8 @@
-1)git checkout -b branch branch1     #to create new branch(branch1)
+1)git checkout -b branch1     #to create new branch(branch1)
 
 2)git push --set-upstream origin branch1   #creating a new branch for main fork in github
 
-3)git add filename
+3)git add filename  #file fo to staged
 
 4)git commit -m "command for that commit"
 
