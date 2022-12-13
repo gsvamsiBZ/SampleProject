@@ -10,6 +10,6 @@
 
 6)git remote add upstream https://github.com/gsvamsi18/SampleProject.git(https)
 
-7)git fetch upstream  #get all the changes from the main repo
+7)git fetch upstream main  #get all the changes from the main repo
 
 8)git clone https  #to create a fork of the main project 
