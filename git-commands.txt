@@ -1,0 +1,18 @@
+1)git checkout -b branch1     #to create new branch(branch1)
+
+2)git push --set-upstream origin branch1   #creating a new branch for main fork in github
+
+3)git add filename  #file go to staged changes
+
+4)git commit -m "command for that commit"
+
+5)git push #adding the changes to the fork
+
+6)git remote add upstream https://github.com/gsvamsi18/SampleProject.git(https)
+
+7)git fetch upstream main  #get all the changes from the main repo
+
+8)git clone https  #to create a fork of the main project 
+
+9)git remote -v      #to see all remotes
+
