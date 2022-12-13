@@ -2,7 +2,7 @@
 
 2)git push --set-upstream origin branch1   #creating a new branch for main fork in github
 
-3)git add filename  #file fo to staged
+3)git add filename  #file go to staged changes
 
 4)git commit -m "command for that commit"
 
