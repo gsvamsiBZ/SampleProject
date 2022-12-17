@@ -1,11 +1,11 @@
 const logger = require("../utils/logger").getLogForLib();
-const truecallermodel = require("../db/models/truecallerUserModel")
+const truecallerModel = require("../db/models/truecallerUserModel")
 const asyncDblib = require("./asyncDbLib")
 
 //function to return all records
 module.exports.getAllRecords = async (req, res) => {
   try {
-    const allrecords = await asyncDblib.getAllDocumentsWithFilter(truecallermodel, {})
+    const allrecords = await asyncDblib.getAllDocumentsWithFilter(truecallerModel, {})
     logger.debug("allrecords =",allrecords)
     res.status(200).json(allrecords)
   }
@@ -19,7 +19,7 @@ module.exports.getRecordByNumber = async (req, res) => {
   try {
     let phonenumber = req.query.phone
     let filter = { phone: phonenumber }
-    const data = await asyncDblib.getOneDocumentByFilter(truecallermodel, filter);
+    const data = await asyncDblib.getOneDocumentByFilter(truecallerModel, filter);
     logger.debug("data is ",data)
     res.status(200).json(data)
   }
