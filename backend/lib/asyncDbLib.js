@@ -20,6 +20,7 @@ exports.findOneDocumentByFilterAndUpdate = async function (
   });
   return data;
 };
+
 //findOneAndUpdate with upsert(if no document matches filter, MongoDB will insert one by combining filter and update)
 exports.findOneDocumentByFilterAndUpdateUpsert = async function (
   model,
@@ -91,3 +92,10 @@ exports.getOneDocumentByFilterWithUpdateAndSelect = async function (model, filte
   let data = await model.findOneAndUpdate(filter,select,update);
   return data;
 };
+
+//deleting a record with filter
+exports.deleteDocument = async function (model,filter){
+  logger.debug("deleting document with filter",filter,"from the model",model)
+  let result = await model.deleteOne(filter)
+  return result;
+}
