@@ -17,3 +17,7 @@ module.exports.getLoggerByName = function(name){
 module.exports.getLogForDB = function(){
     return module.exports.getLoggerByName('DataBase Calls');
 }
+
+module.exports.getLogForLib = function(){
+    return module.exports.getLoggerByName('Library Calls');
+}
