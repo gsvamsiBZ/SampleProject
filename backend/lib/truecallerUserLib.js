@@ -2,7 +2,7 @@ const truecallerUserModel = require('../db/models/truecallerUserModel')
 const asyncDbLib = require('../lib/asyncDbLib')
 const logger = require("../utils/logger").getLogForLib();
 
-// insert function 
+// function to insert a record 
 module.exports.insertTruecallerUser = async(req,res) => {
   try{
     let data = {
@@ -20,7 +20,7 @@ module.exports.insertTruecallerUser = async(req,res) => {
     res.status(500).json(err)
   }
 }
-// delete function
+// function to delete a record
 module.exports.deleteTruecallerUser = async(req,res) => {
   try{
     let query = {
@@ -36,5 +36,28 @@ module.exports.deleteTruecallerUser = async(req,res) => {
   }
 }
 
+//function to return all records
+module.exports.getAllRecords = async (req, res) => {
+  try {
+    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, {})
+    logger.debug("allrecords =",allrecords)
+    res.status(200).json(allrecords)
+  }
+  catch (err) {
+    res.status(500).json(err);
+  }
+}
 
-  
+//function to return record with phone filter
+module.exports.getRecordByNumber = async (req, res) => {
+  try {
+    let phonenumber = req.query.phone
+    let filter = { phone: phonenumber }
+    const result = await asyncDbLib.getOneDocumentByFilter(truecallerUserModel, filter);
+    logger.debug("result is ",result)
+    res.status(200).json(result)
+  }
+  catch (err) {
+    res.status(500).json(err);
+  }
+}
