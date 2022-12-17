@@ -91,8 +91,8 @@ exports.getOneDocumentByFilterWithUpdateAndSelect = async function (model, filte
   let data = await model.findOneAndUpdate(filter,select,update);
   return data;
 };
-exports.deleteDocument = async function (model,query){
-  logger.debug("deleting document of query",query,"from the model",model)
-  let result = await model.deleteOne(query)
+exports.deleteDocument = async function (model,filter){
+  logger.debug("deleting document with the help of",filter,"from the model",model)
+  let result = await model.deleteOne(filter)
   return result;
 }

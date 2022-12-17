@@ -1,12 +1,8 @@
-// insert function 
-// delete function
-// get all records function
-// get 1 record function
 const truecallerUserModel = require('../db/models/truecallerUserModel')
 const asyncDbLib = require('../lib/asyncDbLib')
-const logger = require("../utils/logger").getLogForDB();
+const logger = require("../utils/logger").getLogForLib();
 
-
+// insert function 
 module.exports.insertTruecallerUser = async(req,res) => {
   try{
     let data = {
@@ -17,14 +13,14 @@ module.exports.insertTruecallerUser = async(req,res) => {
     }
     const result = await asyncDbLib.createDocument(truecallerUserModel,data)
     logger.debug(result)
-    res.status(200)
+    res.status(200).json(result)
   }
   catch(err){
-    console.log(err)
-    res.status(500)
+    logger.debug(err)
+    res.status(500).json(err)
   }
 }
-
+// delete function
 module.exports.deleteTruecallerUser = async(req,res) => {
   try{
     let query = {
@@ -32,11 +28,11 @@ module.exports.deleteTruecallerUser = async(req,res) => {
     }
     const result = await asyncDbLib.deleteDocument(truecallerUserModel,query)
     logger.debug(result)
-    res.status(200)
+    res.status(200).json(result)
   }
   catch(err){
-    console.log(err)
-    res.status(500)
+    logger.debug(err)
+    res.status(500).json(err)
   }
 }
 
