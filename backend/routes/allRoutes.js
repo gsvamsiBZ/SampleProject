@@ -9,7 +9,7 @@ router.get('/hello', function(req, res){
 });
 router.get('/getMessage',msg.getMessage);
 router.get('/get')
-router.get('/deleteUser',truecallerUserLib.deleteTruecallerUser)
-router.post('/insertUser',truecallerUserLib.insertTruecallerUser)
+router.get('/deleteTruecallerUser',truecallerUserLib.deleteTruecallerUser)
+router.post('/insertTruecallerUser',truecallerUserLib.insertTruecallerUser)
 
 module.exports = router;
