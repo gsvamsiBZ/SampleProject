@@ -11,12 +11,20 @@ module.exports.insertTruecallerUser = async (req, res) => {
       location: req.body.location,
       email: req.body.email
     }
-    const result = await asyncDbLib.createDocument(truecallerUserModel, data)
-    logger.debug(result)
-    res.status(200).json(result)
+    let dup=await asyncDbLib.getOneDocumentByFilter(truecallerUserModel,{phone:req.body.phone})
+    logger.error("dup is ",dup)
+    if(dup){
+      res.json("duplicate")
+    }
+    else{
+       console.log("outside if ")
+       const result = await asyncDbLib.createDocument(truecallerUserModel, data)
+      logger.debug(result)
+       res.status(200).json(result)
+       }
   }
   catch (err) {
-    logger.debug(err)
+    logger.error(err)
     res.status(500).json(err)
   }
 }
