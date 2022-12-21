@@ -1,13 +1,20 @@
-import React from "react";
+import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import { Table, Container } from '@mantine/core';
 import Navbar from "./navbar";
+
 function HomePage() {
-  const elements = [
-    { name: "Siddhartha Reddy Bethi", phone: "9550738033", email: "sid@gmail.com", location: "Nizamabad" },
-    { name: "Karthik", phone: "9990078033", email: "kar@gmail.com", location: "Hyderabad" },
-    { name: "Vamsi", phone: "8887318093", email: "vamsi@gmail.com", location: "Delhi" },
-  ];
-  const rows = elements.map((element) => (
+  let [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/getAllRecords").then(json => {
+      setData(json.data)      
+    }).catch(error => {
+      console.log(error);
+    })
+  }, []);
+  
+  const rows = data.map((element) => (
     <tr key={element.name}>
       <td>{element.name}</td>
       <td>{element.phone}</td>
@@ -20,7 +27,7 @@ function HomePage() {
       <Navbar></Navbar>
       <Container
         mt={"xl"}
-        size={"lg"}
+        size={"md"}
         my={20}
         style={{
           minHeight: "100vh",
