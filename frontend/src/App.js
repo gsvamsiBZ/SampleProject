@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./Component/homepage";
-import Adduser from "./Component/adduser";
+import Adduser from "./Component/addTruecallerUser";
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 
