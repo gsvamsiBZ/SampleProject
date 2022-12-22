@@ -73,9 +73,9 @@ exports.getDistinctValuesOfFieldSorted = async function(model,field){
 }
 
 //find with filter
-exports.getAllDocumentsWithFilter = async function(model,filter){
+exports.getAllDocumentsWithFilter = async function(model,filter,sort){
   logger.debug("Getting all documents from model",model,"with filter",filter);
-  let data = await model.find(filter);
+  let data = await model.find(filter).sort(sort);
   return data;
 }
 

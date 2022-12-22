@@ -16,7 +16,7 @@ module.exports.insertTruecallerUser = async (req, res) => {
     res.status(200).json(result)
   }
   catch (err) {
-    logger.debug(err)
+    logger.error(err)
     res.status(500).json(err)
   }
 }
@@ -31,7 +31,7 @@ module.exports.deleteTruecallerUser = async (req, res) => {
     res.status(200).json(result)
   }
   catch (err) {
-    logger.debug(err)
+    logger.error(err)
     res.status(500).json(err)
   }
 }
@@ -39,11 +39,19 @@ module.exports.deleteTruecallerUser = async (req, res) => {
 //function to return all records
 module.exports.getAllRecords = async (req, res) => {
   try {
-    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, {})
+    logger.debug("request query =",req.query);
+    let filter = {$and:[ 
+      {name: { $regex: req.query.name, $options: "i" }},
+      {phone: { $regex: req.query.phone, $options: "i" }},
+      {location: { $regex: req.query.location, $options: "i" }},
+      {email: { $regex: req.query.email, $options: "i" }},
+    ] };
+    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, filter,{"updatedAt":-1})
     logger.debug("allrecords =", allrecords)
     res.status(200).json(allrecords)
   }
   catch (err) {
+    logger.error(err)
     res.status(500).json(err);
   }
 }
@@ -58,6 +66,7 @@ module.exports.getRecordByNumber = async (req, res) => {
     res.status(200).json(result)
   }
   catch (err) {
+    logger.error(err)
     res.status(500).json(err);
   }
 }
