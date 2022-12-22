@@ -61,3 +61,17 @@ module.exports.getRecordByNumber = async (req, res) => {
     res.status(500).json(err);
   }
 }
+
+module.exports.findandupdate=async(req,res)=>{
+      try{
+           let data=req.body; 
+           let filter={phone:data.oldphone}
+           const result=await asyncDbLib.findOneDocumentByFilterAndUpdate(truecallerUserModel,filter,data)
+           logger.debug("result is ",result)
+           res.status(200).json(result)
+      }
+      catch(err){
+        logger.debug(err)
+        res.status(500).json(err)
+      }
+}
