@@ -1,7 +1,8 @@
 import React from "react"
 import { TextInput, Button, Group, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import axios from "axios"
+import axios from "axios";
+import Navbar from "./navbar";
 import { showNotification } from '@mantine/notifications';
 function Adduser(){
     async function add(values){
@@ -12,24 +13,21 @@ function Adduser(){
         if(content.data=="duplicate"){
              console.log("Duplicate found")
              showNotification({
-              title:"Duplicate Error Notification",
-              message:"Found Duplicate Key of Phone Number",
+              title:"Error",
+              message:"Phone Number already exists",
               autoClose: 4000,
               color:"red"
           })
         }
         else{
           showNotification({
-            title:"Success Notification",
-            message:"Insertion into DB Successfull",
+            title:"Success",
+            message:"Record Inserted Succesfully",
             autoClose: 4000,
             color:"green",
             
         })
-        let g=document.getElementsByTagName("Input");
-        for(let x of g){
-          x.value=""
-        }
+        window.location.reload()
         }
         
         }
@@ -79,31 +77,28 @@ function Adduser(){
       });
     return(
         <div>
-        <Box sx={{ maxWidth: 300 }} mx="auto">
+           <Navbar></Navbar>
+        <Box sx={{ maxWidth: 300}} mx="auto" mt="2%">
       <form onSubmit={form.onSubmit((values) => add(values))}>
         <TextInput
         id="name"
           required
           withAsterisk
           label="Name"
-          placeholder="your Name"
           {...form.getInputProps('name')}
         />
         <TextInput
         required
           withAsterisk
           label="Phone"
-          placeholder="your Phone Number"
           {...form.getInputProps('phone')}
         />
         <TextInput
           label="Email"
-          placeholder="your email"
           {...form.getInputProps('email')}
         />
         <TextInput
           label="Location"
-          placeholder="your Location"
           {...form.getInputProps('location')}
         />
         <Group position="right" mt="md">
