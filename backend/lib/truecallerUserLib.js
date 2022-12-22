@@ -11,17 +11,17 @@ module.exports.insertTruecallerUser = async (req, res) => {
       location: req.body.location,
       email: req.body.email
     }
-    let dup=await asyncDbLib.getOneDocumentByFilter(truecallerUserModel,{phone:req.body.phone})
-    logger.error("dup is ",dup)
-    if(dup){
-      res.json("duplicate")
+    //checking if given phone number already exists in DB 
+    let duplicateRecord = await asyncDbLib.getOneDocumentByFilter(truecallerUserModel, { phone: req.body.phone })
+    logger.debug("duplicate Record is ", duplicateRecord)
+    if (duplicateRecord) {
+      res.status(409).json(duplicateRecord);
     }
-    else{
-       console.log("outside if ")
-       const result = await asyncDbLib.createDocument(truecallerUserModel, data)
+    else {
+      const result = await asyncDbLib.createDocument(truecallerUserModel, data)
       logger.debug(result)
-       res.status(200).json(result)
-       }
+      res.status(200).json(result)
+    }
   }
   catch (err) {
     logger.error(err)
@@ -47,14 +47,16 @@ module.exports.deleteTruecallerUser = async (req, res) => {
 //function to return all records
 module.exports.getAllRecords = async (req, res) => {
   try {
-    logger.debug("request query =",req.query);
-    let filter = {$and:[ 
-      {name: { $regex: req.query.name, $options: "i" }},
-      {phone: { $regex: req.query.phone, $options: "i" }},
-      {location: { $regex: req.query.location, $options: "i" }},
-      {email: { $regex: req.query.email, $options: "i" }},
-    ] };
-    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, filter,{"updatedAt":-1})
+    logger.debug("request query =", req.query);
+    let filter = {
+      $and: [
+        { name: { $regex: req.query.name, $options: "i" } },
+        { phone: { $regex: req.query.phone, $options: "i" } },
+        { location: { $regex: req.query.location, $options: "i" } },
+        { email: { $regex: req.query.email, $options: "i" } },
+      ]
+    };
+    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, filter, { "updatedAt": -1 })
     logger.debug("allrecords =", allrecords)
     res.status(200).json(allrecords)
   }
