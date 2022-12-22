@@ -2,30 +2,34 @@ import React from "react"
 import { TextInput, Button, Group, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import axios from "axios"
-import {useNavigate} from "react-router-dom";
 import { showNotification } from '@mantine/notifications';
-
 function Adduser(){
-    const navigate=useNavigate()
     async function add(values){
         try{
         console.log("values are ",values)
         let content=await axios.post("api/insertTruecallerUser",values)
         console.log("cotent is ",content)
         if(content.data=="duplicate"){
+             console.log("Duplicate found")
              showNotification({
               title:"Duplicate Error Notification",
               message:"Found Duplicate Key of Phone Number",
-              style:{backgroundColor:"red"}
+              autoClose: 4000,
+              color:"red"
           })
         }
         else{
           showNotification({
             title:"Success Notification",
             message:"Insertion into DB Successfull",
-            style:{backgroundColor:"green"}
+            autoClose: 4000,
+            color:"green",
+            
         })
-        navigate("/")
+        let g=document.getElementsByTagName("Input");
+        for(let x of g){
+          x.value=""
+        }
         }
         
         }
@@ -33,7 +37,9 @@ function Adduser(){
             showNotification({
                 title:"Error Notification",
                 message:err,
-                style: { backgroundColor: 'red' }
+                autoClose: 4000,
+              color:"red"
+               
             })
         }
     }
@@ -76,6 +82,7 @@ function Adduser(){
         <Box sx={{ maxWidth: 300 }} mx="auto">
       <form onSubmit={form.onSubmit((values) => add(values))}>
         <TextInput
+        id="name"
           required
           withAsterisk
           label="Name"
