@@ -25,7 +25,6 @@ function HomePage() {
       + "&page=" + page
       + "&limit=" + limit
     ).then(json => {
-      console.log(json.data);
       setPages(json?.data?.pages)
       setData(json?.data?.docs)
     }).catch(error => {
