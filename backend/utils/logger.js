@@ -1,5 +1,5 @@
 var log4js = require('log4js');
-const logLevel = process.env.LOG_LEVEL || 'info';
+const logLevel = process.env.LOG_LEVEL || 'debug';
 
 module.exports.getLoggerByName = function(name){
 	log4js.configure({
