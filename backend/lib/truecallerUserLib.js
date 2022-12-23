@@ -63,7 +63,7 @@ module.exports.getAllRecords = async (req, res) => {
         res.status(500).json(err);
       }
       else {
-        logger.info(result)
+        logger.debug(result)
         res.status(200).json(result);
       }
     }
