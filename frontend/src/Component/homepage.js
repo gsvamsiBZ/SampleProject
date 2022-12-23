@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
-import { Table, Container, Input, Group } from '@mantine/core';
+import { Table, Container, Input, Group, Pagination, Space } from '@mantine/core';
 import Navbar from "./navbar";
 import { BsSearch } from "react-icons/bs";
 
@@ -8,23 +8,26 @@ import { BsSearch } from "react-icons/bs";
 function HomePage() {
   let [data, setData] = useState([]);
   let [searchfields, setSearchfields] = useState({ name: "", phone: "", email: "", location: "" });
-  let [page, SetPage] = useState(1);
-  let [pages, SetPages] = useState(1);
-  let [limit, setPage] = useState(1);
-  let [query, SetQuery] = useState("");
+  let [page, setPage] = useState(1);
+  let [pages, setPages] = useState(1);
+  let [limit, setLimit] = useState(10);
 
   useEffect(() => {
     getAllRecords()
-  }, []);
-  
+  }, [page]);
+
   //Function to get all TrucallerUser records
   const getAllRecords = async () => {
     axios.get("/api/getAllRecords?name=" + searchfields.name
       + "&phone=" + searchfields.phone
       + "&email=" + searchfields.email
       + "&location=" + searchfields.location
+      + "&page=" + page
+      + "&limit=" + limit
     ).then(json => {
-      setData(json.data)
+      console.log(json.data);
+      setPages(json?.data?.pages)
+      setData(json?.data?.docs)
     }).catch(error => {
       console.log(error);
     })
@@ -47,10 +50,11 @@ function HomePage() {
 
   const search = (e) => {
     if (e.key == "Enter") {
+      setPage(1)
       getAllRecords()
     }
   }
-  
+
 
   return (
     <div>
@@ -87,7 +91,7 @@ function HomePage() {
             <Input
               id='email'
               size={"sm"}
-              placeholder="Search by email"
+              placeholder="Search by Email"
               radius="lg"
               onChange={updateSearchFields}
               onKeyUp={search}
@@ -104,6 +108,7 @@ function HomePage() {
             />
           </Group>
         </div>
+        <Space h="xs" />
         <Table striped highlightOnHover  >
           <thead>
             <tr>
@@ -115,6 +120,8 @@ function HomePage() {
           </thead>
           <tbody>{rows}</tbody>
         </Table>
+        <br />
+        <Pagination page={page} onChange={setPage} total={pages} size="md" radius="md" withEdges siblings={1} position="right" />;
       </Container>
     </div>
   );
