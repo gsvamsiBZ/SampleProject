@@ -67,7 +67,7 @@ function HomePage() {
         phone: newDetails.phone,
         email: newDetails.email,
         location: newDetails.location,
-        oldphone: oldDetails.phone
+        oldPhone: oldDetails.phone
       }
       try {
         let content = await axios.post("/api/findAndUpdate", temp)

@@ -85,9 +85,9 @@ module.exports.getRecordByNumber = async (req, res) => {
 module.exports.findAndUpdate = async (req, res) => {
   try {
     let data = req.body;
-    let filter = { phone: data.oldphone }
+    let filter = { phone: data.oldPhone }
     let duplicateRecord = false
-    if (data.oldphone != data.phone) {
+    if (data.oldPhone != data.phone) {
       //checking if updated phone number already exits in DB
       duplicateRecord = await asyncDbLib.getOneDocumentByFilter(truecallerUserModel, { phone: req?.body?.phone })
       logger.debug("duplicate Record is ", duplicateRecord)
