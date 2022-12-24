@@ -47,16 +47,7 @@ module.exports.deleteTruecallerUser = async (req, res) => {
 //function to return all records
 module.exports.getAllRecords = async (req, res) => {
   try {
-    logger.debug("request query =", req.query);
-    let filter = {
-      $and: [
-        { name: { $regex: req.query.name, $options: "i" } },
-        { phone: { $regex: req.query.phone, $options: "i" } },
-        { location: { $regex: req.query.location, $options: "i" } },
-        { email: { $regex: req.query.email, $options: "i" } },
-      ]
-    };
-    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, filter, { "updatedAt": -1 })
+    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, {})
     logger.debug("allrecords =", allrecords)
     res.status(200).json(allrecords)
   }
@@ -64,6 +55,33 @@ module.exports.getAllRecords = async (req, res) => {
     logger.error(err)
     res.status(500).json(err);
   }
+}
+
+//function to return records with filter and pagination
+module.exports.getAllRecordsWithFilterPagination = async (req, res) => {
+  logger.debug("request query =", req.query);
+  let filter = {
+    $and: [
+      { name: { $regex: req?.query?.name, $options: "i" } },
+      { phone: { $regex: req?.query?.phone, $options: "i" } },
+      { location: { $regex: req?.query?.location, $options: "i" } },
+      { email: { $regex: req?.query?.email, $options: "i" } },
+    ]
+  };
+  //Getting limited records from db for the required required page 
+  truecallerUserModel.paginate(
+    filter, { page: req?.query?.page|| 1, limit: req?.query?.limit|| 10, sort: { "updatedAt": -1 } },
+    (err, result) => {
+      if (err) {
+        logger.error(err)
+        res.status(500).json(err);
+      }
+      else {
+        logger.debug(result)
+        res.status(200).json(result);
+      }
+    }
+  )
 }
 
 //function to return record with phone filter
