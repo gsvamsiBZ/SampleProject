@@ -7,7 +7,7 @@ import { BsSearch } from "react-icons/bs";
 
 function HomePage() {
   let [data, setData] = useState([]);
-  let [searchfields, setSearchfields] = useState({ name: "", phone: "", email: "", location: "" });
+  let [searchFields, setSearchFields] = useState({ name: "", phone: "", email: "", location: "" });
   let [page, setPage] = useState(1);
   let [pages, setPages] = useState(1);
   let [limit, setLimit] = useState(10);
@@ -18,10 +18,10 @@ function HomePage() {
 
   //Function to get all TrucallerUser records
   const getAllRecords = async () => {
-    axios.get("/api/getAllRecordsWithFilterPagination?name=" + searchfields.name
-      + "&phone=" + searchfields.phone
-      + "&email=" + searchfields.email
-      + "&location=" + searchfields.location
+    axios.get("/api/getAllRecordsWithFilterPagination?name=" + searchFields.name
+      + "&phone=" + searchFields.phone
+      + "&email=" + searchFields.email
+      + "&location=" + searchFields.location
       + "&page=" + page
       + "&limit=" + limit
     ).then(json => {
@@ -42,9 +42,9 @@ function HomePage() {
   ));
 
   const updateSearchFields = (e) => {
-    let temp = { ...searchfields }
+    let temp = { ...searchFields }
     temp[e.target.id] = e.target.value
-    setSearchfields(temp)
+    setSearchFields(temp)
   }
 
   const search = (e) => {

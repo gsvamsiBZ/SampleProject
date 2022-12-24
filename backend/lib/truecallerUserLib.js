@@ -68,6 +68,7 @@ module.exports.getAllRecordsWithFilterPagination = async (req, res) => {
       { email: { $regex: req?.query?.email, $options: "i" } },
     ]
   };
+  //Getting limited records from db for the required required page 
   truecallerUserModel.paginate(
     filter, { page: req?.query?.page|| 1, limit: req?.query?.limit|| 10, sort: { "updatedAt": -1 } },
     (err, result) => {
