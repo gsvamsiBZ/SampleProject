@@ -18,7 +18,7 @@ function HomePage() {
 
   //Function to get all TrucallerUser records
   const getAllRecords = async () => {
-    axios.get("/api/getAllRecords?name=" + searchfields.name
+    axios.get("/api/getAllRecordsWithFilterPagination?name=" + searchfields.name
       + "&phone=" + searchfields.phone
       + "&email=" + searchfields.email
       + "&location=" + searchfields.location

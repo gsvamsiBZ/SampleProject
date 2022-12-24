@@ -46,6 +46,19 @@ module.exports.deleteTruecallerUser = async (req, res) => {
 
 //function to return all records
 module.exports.getAllRecords = async (req, res) => {
+  try {
+    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, {})
+    logger.debug("allrecords =", allrecords)
+    res.status(200).json(allrecords)
+  }
+  catch (err) {
+    logger.error(err)
+    res.status(500).json(err);
+  }
+}
+
+//function to return records with filter and pagination
+module.exports.getAllRecordsWithFilterPagination = async (req, res) => {
   logger.debug("request query =", req.query);
   let filter = {
     $and: [
