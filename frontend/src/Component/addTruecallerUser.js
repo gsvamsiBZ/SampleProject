@@ -8,17 +8,13 @@ function Adduser() {
   async function add(values) {
     let content
     try {
-
       content = await axios.post("api/insertTruecallerUser", values)
-
       showNotification({
         title: "Success",
         message: "Record Inserted Succesfully",
         autoClose: 4000,
         color: "green",
-
       })
-      
     }
     catch (err) {
       console.log(err)
@@ -69,7 +65,6 @@ function Adduser() {
       name: '',
       location: ''
     },
-
     validate: {
       email: (value) => (validateemail(value) ? null : 'Invalid email'),
       phone: (value) => (validatemobile(value) ? null : 'Invalid number'),
@@ -106,7 +101,6 @@ function Adduser() {
           </Group>
         </form>
       </Box>
-
     </div>
   )
 }
