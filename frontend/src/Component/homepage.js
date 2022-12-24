@@ -35,13 +35,31 @@ function HomePage() {
     })
   }
 
+  const showInvalidMobileNotification = () => {
+    showNotification({
+      title: "Error",
+      message: "Invalid Phone Number",
+      autoClose: notificationAutocloseTimeUp,
+      color: "red"
+    })
+  }
+
+  const showInvalidEmailNotification = () => {
+    showNotification({
+      title: "Error",
+      message: "Invalid Email",
+      autoClose: notificationAutocloseTimeUp,
+      color: "red"
+    })
+  }
+
   //Updating the user data in database
   async function update(e) {
     if (!validateMobile(newDetails.phone)) {
-      alert("Please enter valid Phone number")
+      showInvalidMobileNotification()
     }
     else if (!validateEmail(newDetails.email)) {
-      alert("Please enter valid email id")
+      showInvalidEmailNotification()
     }
     else {
       let temp = {
