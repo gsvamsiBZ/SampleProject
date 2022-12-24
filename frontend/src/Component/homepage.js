@@ -1,10 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
-import { Table, Modal, Container, Stack } from '@mantine/core';
-import { TextInput, Button, Group, Box } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { useRef } from 'react';
-import { Input } from '@mantine/core';
+import { Table, Modal, Input, Container, Stack, TextInput, Button, Group, } from '@mantine/core';
 import Navbar from "./navbar";
 import { BsSearch } from "react-icons/bs";
 import { showNotification } from '@mantine/notifications';
@@ -18,11 +14,10 @@ function HomePage() {
   let [query, SetQuery] = useState("");
   const [data, setData] = useState([]);
   const [opened, setOpened] = useState(false);
-  const [details, setDetails] = useState({})
-  const myname = useRef();
-  const myemail = useRef();
-  const myphone = useRef();
-  const mylocation = useRef()
+  const [oldDetails, setOldDetails] = useState({})
+  const [newDetails, setNewDetails] = useState({})
+  const notificationAutocloseTimeUp = 4000;
+
   useEffect(() => {
     getAllRecords()
   }, []);
@@ -42,26 +37,26 @@ function HomePage() {
 
   //Updating the user data in database
   async function update(e) {
-    if (!validateMobile(myphone.current.value)) {
+    if (!validateMobile(newDetails.phone)) {
       alert("Please enter valid Phone number")
     }
-    else if (!validateEmail(myemail.current.value)) {
+    else if (!validateEmail(newDetails.email)) {
       alert("Please enter valid email id")
     }
     else {
-      let newdetails = {
-        name: myname.current.value,
-        phone: myphone.current.value,
-        email: myemail.current.value,
-        location: mylocation.current.value,
-        oldphone: details.phone
+      let temp = {
+        name: newDetails.name,
+        phone: newDetails.phone,
+        email: newDetails.email,
+        location: newDetails.location,
+        oldphone: oldDetails.phone
       }
       try {
-        let content = await axios.post("/api/findAndUpdate", newdetails)
+        let content = await axios.post("/api/findAndUpdate", temp)
         showNotification({
           title: "Success",
           message: "Record Updated Succesfully",
-          autoClose: 4000,
+          autoClose: notificationAutocloseTimeUp,
           color: "green",
         })
         getAllRecords()
@@ -73,7 +68,7 @@ function HomePage() {
           showNotification({
             title: "Error",
             message: "Phone Number already exists",
-            autoClose: 4000,
+            autoClose: notificationAutocloseTimeUp,
             color: "red"
           })
         }
@@ -81,7 +76,7 @@ function HomePage() {
           showNotification({
             title: "Error",
             message: "Internal Server Error",
-            autoClose: 4000,
+            autoClose: notificationAutocloseTimeUp,
             color: "red"
           })
         }
@@ -89,9 +84,10 @@ function HomePage() {
     }
   }
 
-  //To store the data of updating user
+  //To store the data of current updating user and to pop-up the model
   function show(e) {
-    setDetails(e)
+    setOldDetails(e)
+    setNewDetails(e)
     setOpened(true)
   }
   const rows = data.map((element) => (
@@ -129,6 +125,12 @@ function HomePage() {
     let temp = { ...searchfields }
     temp[e.target.id] = e.target.value
     setSearchfields(temp)
+  }
+
+  const updateCurrentUser = (e) => {
+    let temp = { ...newDetails }
+    temp[e.target.id] = e.target.value
+    setNewDetails(temp)
   }
 
   const search = (e) => {
@@ -202,42 +204,44 @@ function HomePage() {
           <tbody style={{ cursor: "pointer" }}>{rows}</tbody>
         </Table>
       </Container>
-      <div style={{ marginTop: "1cm" }}>
-        <Modal
-          centered
-          opened={opened}
-          onClose={() => { setOpened(false) }}
-          title="Update the Details"
-        >
-          <Stack>
-            <TextInput
-              label="name"
-              ref={myname}
-              value={details.name}
-            >
-            </TextInput>
-            <TextInput
-              label="phone"
-              ref={myphone}
-              value={details.phone}
-            >
-            </TextInput>
-            <TextInput
-              label="email"
-              ref={myemail}
-              value={details.email}
-            >
-            </TextInput>
-            <TextInput
-              label="location"
-              ref={mylocation}
-              value={details.location}
-            >
-            </TextInput>
-          </Stack>
-          <Button mt="sm" onClick={update}>Update</Button>
-        </Modal>
-      </div>
+      <Modal
+        centered
+        opened={opened}
+        onClose={() => { setOpened(false) }}
+        title="Update the Details"
+      >
+        <Stack>
+          <TextInput
+            id="name"
+            label="name"
+            value={newDetails.name}
+            onChange={updateCurrentUser}
+          >
+          </TextInput>
+          <TextInput
+            id="phone"
+            label="phone"
+            value={newDetails.phone}
+            onChange={updateCurrentUser}
+          >
+          </TextInput>
+          <TextInput
+            id="email"
+            label="email"
+            value={newDetails.email}
+            onChange={updateCurrentUser}
+          >
+          </TextInput>
+          <TextInput
+            id="location"
+            label="location"
+            value={newDetails.location}
+            onChange={updateCurrentUser}
+          >
+          </TextInput>
+        </Stack>
+        <Button mt="sm" onClick={update}>Update</Button>
+      </Modal>
     </div>
   );
 }
