@@ -26,7 +26,7 @@
     - ssh-keygen -t ed25519 -C "your email id"
 - Press enter for all inputs and it will create two files in ~/.ssh folder - id_ed25519 and id_ed25519.pub
 - Copy the contents of id_ed25519.pub file.
-- In your [Github Account settings ](https://github.com/settings/profile), click on “SSH and GPG Keys”. (Make sure you are logged in using beingzero id).
+- In your [Github Account settings ](https://github.com/settings/profile), click on “SSH and GPG Keys”. 
 - On the [SSH and GPG Keys page ](https://github.com/settings/keys), click on “New SSH key”. Give an easy to understand title and paste the contents of the “id_ed25519.pub” file in the Key section. Click “Add SSH Key”.
 
 **NOTE:** 
@@ -74,6 +74,7 @@
 | `git merge [branch name]` | Merge a branch into the active branch |
 | `git merge [source branch] [target branch]` | Merge a branch into a target branch |
 | `git stash` | Stash changes in a dirty working directory |
+| `git stash pop` | Remove a single stashed state from the stash list and apply it on top of the current working tree state |
 | `git stash clear` | Remove all stashed entries |
 
 ### Sharing & Updating Projects
