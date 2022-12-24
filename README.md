@@ -1,6 +1,7 @@
 
 ------------------------------------------------
-		(Project Initialization)  TimeStamp: 13/12/2022
+## Steps to start a MERN Project:
+
 1) npm init
 2) npm i express
 3) create backend folder
@@ -20,13 +21,30 @@
 15) create component folder in frontend/src and create homepage.js in component folder.
 16) Add proxy to frontend/package.json
 ------------------------------------------------
+## Steps to set up SSH based authentication:
+- Create a ssh key on your system’s terminal using following command
+    - ssh-keygen -t ed25519 -C "your email id"
+- Press enter for all inputs and it will create two files in ~/.ssh folder - id_ed25519 and id_ed25519.pub
+- Copy the contents of id_ed25519.pub file.
+- In your [Github Account settings ](https://github.com/settings/profile), click on “SSH and GPG Keys”. (Make sure you are logged in using beingzero id).
+- On the [SSH and GPG Keys page ](https://github.com/settings/keys), click on “New SSH key”. Give an easy to understand title and paste the contents of the “id_ed25519.pub” file in the Key section. Click “Add SSH Key”.
 
+**NOTE:** 
+
+- For Windows users go to services by searching in the search bar.
+- Next search openSSH Authentication Agent.
+- Right click on it and select Automatic from startup type.
+- After that once again right click on openSSH Authentication Agent & start.
+
+
+------------------------------------------------
 ## Git Commands
 ### Getting & Creating Projects
+
 | Command | Description |
 | ------- | ----------- |
 | `git init` | Initialize a local Git repository |
-| `git clone ssh://git@github.com/[username]/[repository-name].git` | Create a local copy of a remote repository |
+| `git clone ssh://git@github.com/[username]/[repository-name].git` | Create a local copy of a remote repository (SSH is usually considered more secure)|
 
 ### Basic Snapshotting
 
@@ -81,6 +99,7 @@
 | `git diff [source branch] [target branch]` | Preview changes before merging |
 
 ## Coding Guidelines
+
 - Have comments in your code. Comments should be brief and concise to explain what is being done.
 - Abstraction for DB and API connections.
 - Function names should be self explanatory.
@@ -94,5 +113,3 @@
 - Do not store credentials/keys in code. Keep them in configurable environments.
 - Don’t hardcode values in the code. Instead use variables. For example: Timeouts/keepalives, Values of external sites data 
 - Reduce DB calls. Wherever possible cache data, optimize logic to reduce DB calls.
-
-
