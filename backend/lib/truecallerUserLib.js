@@ -81,14 +81,16 @@ module.exports.getRecordByNumber = async (req, res) => {
   }
 }
 
-module.exports.findandupdate = async (req, res) => {
+//function to find a document and update it 
+module.exports.findAndUpdate = async (req, res) => {
   try {
     let data = req.body;
     let filter = { phone: data.oldphone }
-    let duplicateRecord=false
-    if(data.oldphone!=data.phone){
-    duplicateRecord = await asyncDbLib.getOneDocumentByFilter(truecallerUserModel, { phone: req?.body?.phone })
-    logger.debug("duplicate Record is ", duplicateRecord)
+    let duplicateRecord = false
+    if (data.oldphone != data.phone) {
+      //checking if updated phone number already exits in DB
+      duplicateRecord = await asyncDbLib.getOneDocumentByFilter(truecallerUserModel, { phone: req?.body?.phone })
+      logger.debug("duplicate Record is ", duplicateRecord)
     }
     if (duplicateRecord) {
       res.status(409).json(duplicateRecord);

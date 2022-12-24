@@ -39,12 +39,13 @@ function HomePage() {
       console.log(error);
     })
   }
-  async function add(e) {
-    e.preventDefault()
-    if (!validatemobile(myphone.current.value)) {
+
+  //Updating the user data in database
+  async function update(e) {
+    if (!validateMobile(myphone.current.value)) {
       alert("Please enter valid Phone number")
     }
-    else if (!validateemail(myemail.current.value)) {
+    else if (!validateEmail(myemail.current.value)) {
       alert("Please enter valid email id")
     }
     else {
@@ -55,23 +56,19 @@ function HomePage() {
         location: mylocation.current.value,
         oldphone: details.phone
       }
-      console.log("old details are ", details)
-      console.log("new details are ", newdetails)
       try {
-        let content = await axios.post("/api/findandupdate", newdetails)
-        console.log("content after update ", content)
+        let content = await axios.post("/api/findAndUpdate", newdetails)
         showNotification({
           title: "Success",
           message: "Record Updated Succesfully",
           autoClose: 4000,
           color: "green",
-
         })
         getAllRecords()
         setOpened(false)
       }
       catch (err) {
-        console.log("error", err)
+        console.log(err)
         if (err?.response?.status == 409) {
           showNotification({
             title: "Error",
@@ -91,16 +88,11 @@ function HomePage() {
       }
     }
   }
+
+  //To store the data of updating user
   function show(e) {
     setDetails(e)
     setOpened(true)
-    setTimeout(() => {
-      myemail.current.value = e.email
-      myname.current.value = e.name
-      myphone.current.value = e.phone
-      mylocation.current.value = e.location
-    }, 1000)
-
   }
   const rows = data.map((element) => (
     <tr key={element.phone} onClick={() => { show(element) }}>
@@ -110,7 +102,8 @@ function HomePage() {
       <td>{element.location}</td>
     </tr>
   ));
-  function validatemobile(number) {
+
+  function validateMobile(number) {
     if (number.length != 10) {
       return false
     }
@@ -121,7 +114,8 @@ function HomePage() {
     }
     return true
   }
-  function validateemail(email) {
+
+  function validateEmail(email) {
     email = email.trim()
     if (email.length == 0) {
       return true
@@ -219,25 +213,29 @@ function HomePage() {
             <TextInput
               label="name"
               ref={myname}
+              value={details.name}
             >
             </TextInput>
             <TextInput
               label="phone"
               ref={myphone}
+              value={details.phone}
             >
             </TextInput>
             <TextInput
               label="email"
               ref={myemail}
+              value={details.email}
             >
             </TextInput>
             <TextInput
               label="location"
               ref={mylocation}
+              value={details.location}
             >
             </TextInput>
           </Stack>
-          <Button mt="sm" onClick={add}>Update</Button>
+          <Button mt="sm" onClick={update}>Update</Button>
         </Modal>
       </div>
     </div>
