@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
-import { Table, Modal, Input, Container, Stack, TextInput, Button, Group, Space, Pagination } from '@mantine/core';
+import { Table, Modal, Input, Container, Stack, TextInput, Button, Group, Space, Pagination, Select, Grid, Text } from '@mantine/core';
 import Navbar from "./navbar";
 import { BsSearch } from "react-icons/bs";
 import { showNotification } from '@mantine/notifications';
@@ -16,10 +16,11 @@ function HomePage() {
   let [pages, setPages] = useState(1);
   let [limit, setLimit] = useState(10);
   const notificationAutocloseTimeUp = 4000;
+  const pageLimits = ["10", "20", "50", "100"]
 
   useEffect(() => {
     getAllRecords()
-  }, [page]);
+  }, [page, limit]);
 
   //Function to get all TrucallerUser records
   const getAllRecords = async () => {
@@ -110,12 +111,13 @@ function HomePage() {
     setNewDetails(e)
     setOpened(true)
   }
-  const rows = data.map((element) => (
+  const rows = data.map((element, ind) => (
     <tr key={element.phone} onClick={() => { show(element) }}>
-      <td>{element.name}</td>
-      <td>{element.phone}</td>
-      <td>{element.email}</td>
-      <td>{element.location}</td>
+      <td style={{ textAlign: "center" }}> {limit * (page - 1) + ind + 1}</td>
+      <td style={{ textAlign: "center" }}>{element.name}</td>
+      <td style={{ textAlign: "center" }}>{element.phone}</td>
+      <td style={{ textAlign: "center" }}>{element.email}</td>
+      <td style={{ textAlign: "center" }}>{element.location}</td>
     </tr>
   ));
 
@@ -165,62 +167,82 @@ function HomePage() {
     <div>
       <Navbar></Navbar>
       <Container
-        mt={"xl"}
-        size={"md"}
-        my={20}
-        style={{
-          minHeight: "100vh",
-        }}
+        size={"lg"} my={20} style={{ minHeight: "80vh" }}
       >
         <div>
-          <Group position="apart">
-            <Input
-              id='name'
-              size={"sm"}
-              placeholder="Search by Name"
-              radius="lg"
-              onChange={updateSearchFields}
-              onKeyUp={search}
-              rightSection={<BsSearch />}
-            />
-            <Input
-              id='phone'
-              size={"sm"}
-              placeholder="Search by Phone"
-              radius="lg"
-              onChange={updateSearchFields}
-              onKeyUp={search}
-              rightSection={<BsSearch />}
-
-            />
-            <Input
-              id='email'
-              size={"sm"}
-              placeholder="Search by Email"
-              radius="lg"
-              onChange={updateSearchFields}
-              onKeyUp={search}
-              rightSection={<BsSearch />}
-            />
-            <Input
-              id='location'
-              size={"sm"}
-              placeholder="Search by Location"
-              radius="lg"
-              onChange={updateSearchFields}
-              onKeyUp={search}
-              rightSection={<BsSearch />}
-            />
-          </Group>
+          <Grid>
+            <Grid.Col sm={6} md={2.4} lg={1.5}>
+              <Select
+                id="pageLimit"
+                radius="lg"
+                data={pageLimits}
+                value={limit.toString()}
+                maxDropdownHeight={200}
+                onChange={
+                  (event) => {
+                    setLimit(event)
+                    setPage(1)
+                  }
+                }
+                dropdownComponent="div"
+                transition="pop-top-left"
+                transitionDuration={200}
+                transitionTimingFunction="ease" />
+            </Grid.Col>
+            <Grid.Col sm={6} md={2.4} lg={2.6}>
+              <Input
+                id='name'
+                size={"sm"}
+                placeholder="Search by Name"
+                radius="lg"
+                onChange={updateSearchFields}
+                onKeyUp={search}
+                rightSection={<BsSearch />}
+              />
+            </Grid.Col>
+            <Grid.Col sm={6} md={2.4} lg={2.6}>
+              <Input
+                id='phone'
+                size={"sm"}
+                placeholder="Search by Phone"
+                radius="lg"
+                onChange={updateSearchFields}
+                onKeyUp={search}
+                rightSection={<BsSearch />}
+              />
+            </Grid.Col>
+            <Grid.Col sm={6} md={2.4} lg={2.6}>
+              <Input
+                id='email'
+                size={"sm"}
+                placeholder="Search by Email"
+                radius="lg"
+                onChange={updateSearchFields}
+                onKeyUp={search}
+                rightSection={<BsSearch />}
+              />
+            </Grid.Col>
+            <Grid.Col sm={6} md={2.4} lg={2.6}>
+              <Input
+                id='location'
+                size={"sm"}
+                placeholder="Search by Location"
+                radius="lg"
+                onChange={updateSearchFields}
+                onKeyUp={search}
+                rightSection={<BsSearch />}
+              />
+            </Grid.Col>
+          </Grid>
         </div>
-        <Space h="xs" />
-        <Table striped highlightOnHover  >
+        <Table striped highlightOnHover horizontalSpacing="sm" verticalSpacing="sm">
           <thead>
             <tr>
-              <th style={{ width: "27%" }}>Name</th>
-              <th style={{ width: "26%" }}>Phone</th>
-              <th style={{ width: "26%" }}>Email</th>
-              <th >Location</th>
+              <th style={{ textAlign: "center" }}> <Text size="sm"> S.No  </Text></th>
+              <th style={{ textAlign: "center" }}> <Text size="sm"> Name  </Text></th>
+              <th style={{ textAlign: "center" }}> <Text size="sm"> Phone </Text></th>
+              <th style={{ textAlign: "center" }}> <Text size="sm"> Email </Text></th>
+              <th style={{ textAlign: "center" }}> <Text size="sm"> Location</Text></th>
             </tr>
           </thead>
           <tbody style={{ cursor: "pointer" }}>{rows}</tbody>
