@@ -47,9 +47,9 @@ module.exports.deleteTruecallerUser = async (req, res) => {
 //function to return all records
 module.exports.getAllRecords = async (req, res) => {
   try {
-    const allrecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, {})
-    logger.debug("allrecords =", allrecords)
-    res.status(200).json(allrecords)
+    const allRecords = await asyncDbLib.getAllDocumentsWithFilter(truecallerUserModel, {})
+    logger.debug("allrecords =", allRecords)
+    res.status(200).json(allRecords)
   }
   catch (err) {
     logger.error(err)
@@ -70,7 +70,7 @@ module.exports.getAllRecordsWithFilterPagination = async (req, res) => {
   };
   //Getting limited records from db for the required required page 
   truecallerUserModel.paginate(
-    filter, { page: req?.query?.page|| 1, limit: req?.query?.limit|| 10, sort: { "updatedAt": -1 } },
+    filter, { page: req?.query?.page || 1, limit: req?.query?.limit || 10, sort: { "updatedAt": -1 } },
     (err, result) => {
       if (err) {
         logger.error(err)
@@ -96,5 +96,37 @@ module.exports.getRecordByNumber = async (req, res) => {
   catch (err) {
     logger.error(err)
     res.status(500).json(err);
+  }
+}
+
+//function to find a document and update it 
+module.exports.findAndUpdate = async (req, res) => {
+  try {
+    let data = req.body;
+    let filter = { phone: data.oldPhone }
+    let duplicateRecord = false
+    if (data.oldPhone != data.phone) {
+      //checking if updated phone number already exits in DB
+      duplicateRecord = await asyncDbLib.getOneDocumentByFilter(truecallerUserModel, { phone: req?.body?.phone })
+      logger.debug("duplicate Record is ", duplicateRecord)
+    }
+    if (duplicateRecord) {
+      res.status(409).json(duplicateRecord);
+    }
+    else {
+      try {
+        const result = await asyncDbLib.findOneDocumentByFilterAndUpdate(truecallerUserModel, filter, data)
+        logger.debug("result is ", result)
+        res.status(200).json(result)
+      }
+      catch (err) {
+        logger.error(err)
+        res.status(500).json(err)
+      }
+    }
+  }
+  catch (err) {
+    logger.error(err)
+    res.status(500).json(err)
   }
 }
