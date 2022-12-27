@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import { createStyles, Header, Group, Box, Space, Image, Text } from "@mantine/core"
 import Util from "./Service/util";
-
+import { RiLogoutCircleLine } from "react-icons/ri";
 
 
 const useStyles = createStyles((theme) => ({
@@ -88,6 +88,17 @@ function Navbar() {
                 <Link to="/search" className={classes.link}>
                   Search Users
                 </Link>
+              }
+              {loggedIn &&
+                <a
+                  className={classes.link}
+                  title="logout"
+                  href="/login"
+                  onClick={() => {
+                    util.logout()
+                  }}
+                ><RiLogoutCircleLine size={25} />
+                </a>
               }
             </Group>
 
