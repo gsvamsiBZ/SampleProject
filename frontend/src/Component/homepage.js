@@ -4,6 +4,7 @@ import { Table, Modal, Input, Container, Stack, TextInput, Button, Group, Space,
 import { BsSearch } from "react-icons/bs";
 import { showNotification } from '@mantine/notifications';
 import Util from "./Service/util"
+import * as xlsx from 'xlsx';
 
 function HomePage() {
   const [opened, setOpened] = useState(false);
@@ -35,6 +36,25 @@ function HomePage() {
     }).catch(error => {
       console.log(error);
     })
+  }
+
+  //function to download the records of truecallersusers
+  const downloadTrueCallerRecords = async () => {
+    let content = await axios.get("/api/getAllRecords")
+    let allRecords = content.data
+    let data = []
+    for (let x of allRecords) {
+      data.push({
+        name: x.name,
+        phone: x.phone,
+        email: x.email,
+        location: x.location
+      })
+    }
+    const worksheet = xlsx.utils.json_to_sheet(data);
+    const workbook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    xlsx.writeFile(workbook, "TrueCallerUsersDetails.xlsx");
   }
 
   const showInvalidMobileNotification = () => {
@@ -246,6 +266,7 @@ function HomePage() {
           <tbody style={{ cursor: "pointer" }}>{rows}</tbody>
         </Table>
         <br />
+        <Button onClick={downloadTrueCallerRecords}>Download Records</Button>
         <Pagination page={page} onChange={setPage} total={pages} size="md" radius="md" withEdges siblings={1} position="right" />;
       </Container>
       <Modal
