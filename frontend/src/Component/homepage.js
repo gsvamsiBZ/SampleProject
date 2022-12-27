@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Table, Modal, Input, Container, Stack, TextInput, Button, Group, Space, Pagination, Select, Grid, Text } from '@mantine/core';
-import Navbar from "./navbar";
 import { BsSearch } from "react-icons/bs";
 import { showNotification } from '@mantine/notifications';
-
+import Util from "./Service/util"
 
 function HomePage() {
   const [opened, setOpened] = useState(false);
@@ -165,7 +164,6 @@ function HomePage() {
 
   return (
     <div>
-      <Navbar></Navbar>
       <Container
         size={"lg"} my={20} style={{ minHeight: "80vh" }}
       >
