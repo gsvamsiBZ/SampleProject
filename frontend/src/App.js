@@ -1,7 +1,7 @@
 import Navbar from "./Component/navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./Component/homepage";
-import Adduser from "./Component/addTruecallerUser";
+import Insertion from "./Component/tabsForInsertion";
 import LoginandSignup from "./Component/loginsignup";
 // import ForgotPassword from "./Component/forgotPassword";
 // import ResetPassword from "./Component/resetPassword";
@@ -19,7 +19,7 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/add" element={<Adduser></Adduser>}></Route>
+              <Route path="/add" element={<Insertion></Insertion>}></Route>
               <Route path="/login" element={<LoginandSignup></LoginandSignup>}></Route>
               <Route path="/" element={<HomePage />} />
               {/* <Route path="/forgotPassword" element={<ForgotPassword />} />

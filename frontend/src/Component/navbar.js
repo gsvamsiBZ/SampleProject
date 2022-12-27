@@ -79,7 +79,7 @@ function Navbar() {
                   Home
                 </Link>
               }
-              {loggedIn &&
+              {loggedIn && isAdmin &&
                 <Link to="/add" className={classes.link}>
                   Add
                 </Link>

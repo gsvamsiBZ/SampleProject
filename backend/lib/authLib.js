@@ -7,94 +7,94 @@ const emailNotificationLib = require("./emailNotificationLib")
 var CryptoJS = require("crypto-js");
 
 const encrypt = (message) => {
-	try {
-		let encryptedMessage = CryptoJS.AES.encrypt(message, config.encyption_key).toString();
-		return encryptedMessage
-	}
-	catch (err) {
-		logger.error(err)
-		return null
-	}
+  try {
+    let encryptedMessage = CryptoJS.AES.encrypt(message, config.encyption_key).toString();
+    return encryptedMessage
+  }
+  catch (err) {
+    logger.error(err)
+    return null
+  }
 }
 const decrypt = (encryptedMessage) => {
-	try {
-		let decryptedMessage = CryptoJS.AES.decrypt(encryptedMessage, config.encyption_key).toString(CryptoJS.enc.Utf8);
-		return decryptedMessage
-	}
-	catch (err) {
-		logger.error(err)
-		return null
-	}
+  try {
+    let decryptedMessage = CryptoJS.AES.decrypt(encryptedMessage, config.encyption_key).toString(CryptoJS.enc.Utf8);
+    return decryptedMessage
+  }
+  catch (err) {
+    logger.error(err)
+    return null
+  }
 }
 const getOtp = () => {
-	return Math.floor(Math.random() * (99999 - 10000 + 1)) + min;
+  return Math.floor(Math.random() * (99999 - 10000 + 1)) + min;
 }
 
 // function to login 
 module.exports.login = async (req, res) => {
-	try {
-		let user = req.query.user
-		let password = req.query.password
-		let filter = {
-			$or: [
-				{ username: user },
-				{ email: user },
-			]
-		};
+  try {
+    let user = req.query.user
+    let password = req.query.password
+    let filter = {
+      $or: [
+        { username: user },
+        { email: user },
+      ]
+    };
 
-		//Findiing a matching user with username or email
-		let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, filter)
-		logger.debug("currentUser", currentUser)
-		if (currentUser) {
-			//If passwords match creating a web token and sending it in response
-			if (decrypt(currentUser.password) == password) {
-				const payload = { _id: currentUser._id, name: currentUser.name, email: currentUser.email, role: currentUser.role }
-				let token = jwt.sign(payload, config.jwt_secret, { expiresIn: '24h' });
-				return res.json(token)
-			}
-			else {
-				return res.status(401).json("Invalid Password")
-			}
-		} else {
-			res.status(401).json("Invalid email or username")
-		}
-	}
-	catch (err) {
-		logger.error(err)
-		res.status(500).json('error: ' + err)
-	}
+    //Findiing a matching user with username or email
+    let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, filter)
+    logger.debug("currentUser", currentUser)
+    if (currentUser) {
+      //If passwords match creating a web token and sending it in response
+      if (decrypt(currentUser.password) == password) {
+        const payload = { _id: currentUser._id, name: currentUser.name, email: currentUser.email, role: currentUser.role }
+        let token = jwt.sign(payload, config.jwt_secret, { expiresIn: '24h' });
+        return res.json(token)
+      }
+      else {
+        return res.status(401).json("Invalid Password")
+      }
+    } else {
+      res.status(401).json("Invalid email or username")
+    }
+  }
+  catch (err) {
+    logger.error(err)
+    res.status(500).json('error: ' + err)
+  }
 }
 
 //funtion to signup
 module.exports.signUp = async (req, res) => {
-	try {
-		let newUser = req.body
-		logger.debug("newUser", newUser);
+  try {
+    let newUser = req.body
+    logger.debug("newUser", newUser);
 
-		// checking if there is already an account withis emai
-		let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { email: newUser.email })
-		if (currentUser) {
-			return res.status(409).json("accoount already exists with " + newUser.email)
-		}
-		// currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { username: newUser.username })
-		// if (currentUser) {
-		// 	return res.status(409).json("username already exists with " + newUser.username)
-		// }
-		let userObj = {
-			// username: newUser.username,
-			name: newUser.name,
-			email: newUser.email,
-			// phoneNumber: newUser.phoneNumber,
-			password: encrypt(newUser.password)
-		}
-		logger.debug("userObj", userObj);
-		createdUser = await asyncDbLib.createDocument(userModel, userObj)
-		res.status(201).json("user created")
-	}
-	catch (err) {
-		logger.error(err)
-		res.status(500).json('error: ' + err)
-	}
+    // checking if there is already an account withis emai
+    let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { email: newUser.email })
+    if (currentUser) {
+      return res.status(409).json("accoount already exists with " + newUser.email)
+    }
+    // currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { username: newUser.username })
+    // if (currentUser) {
+    // 	return res.status(409).json("username already exists with " + newUser.username)
+    // }
+    let userObj = {
+      // username: newUser.username,
+      name: newUser.name,
+      email: newUser.email,
+      // phoneNumber: newUser.phoneNumber,
+      password: encrypt(newUser.password)
+    }
+    logger.debug("userObj", userObj);
+    createdUser = await asyncDbLib.createDocument(userModel, userObj)
+    res.status(201).json("user created")
+  }
+  catch (err) {
+    logger.error(err)
+    res.status(500).json('error: ' + err)
+  }
 }
 
 // will use these Later
