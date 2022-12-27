@@ -2,7 +2,6 @@ import React from "react"
 import { TextInput, Button, Group, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import axios from "axios";
-import Navbar from "./navbar";
 import { showNotification } from '@mantine/notifications';
 function Adduser() {
   async function add(values) {
@@ -72,7 +71,6 @@ function Adduser() {
   });
   return (
     <div>
-      <Navbar></Navbar>
       <Box sx={{ maxWidth: 300 }} mx="auto" mt="2%">
         <form onSubmit={form.onSubmit((values) => add(values))}>
           <TextInput
