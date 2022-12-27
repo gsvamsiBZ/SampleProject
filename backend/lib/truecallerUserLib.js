@@ -28,6 +28,29 @@ module.exports.insertTruecallerUser = async (req, res) => {
     res.status(500).json(err)
   }
 }
+
+// function to insert multiple records 
+module.exports.insertManyTruecallerUsers = async (req,res) => {
+  try{
+    console.log(req.body)
+    console.log(typeof req.body[0].phone)
+    const result = await asyncDbLib.insertMultipleDocuments(truecallerUserModel,req.body)
+    logger.debug(result)
+    res.status(200).json("ok")
+  }
+  catch(err){
+    //Checking whether the error is due to the insertion of duplicates
+    if(err.code == 11000){
+      console.log("duplicate values")
+      res.status(409).json(err)
+    }
+    else{
+      logger.error(err.code)
+      res.status(500).json(err)
+    }
+  }
+}
+
 // function to delete a record
 module.exports.deleteTruecallerUser = async (req, res) => {
   try {
