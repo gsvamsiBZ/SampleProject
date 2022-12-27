@@ -10,25 +10,25 @@ import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 
 function App() {
-	return (
-		<div className="App">
-			<MantineProvider withNormalizeCSS withGlobalStyles>
-				<NotificationsProvider position="top-right" zIndex={2077}>
-					<BrowserRouter>
-						<Routes>
-							<Route path="/" element={<HomePage />} />
-							<Route path="/add" element={<Adduser></Adduser>}></Route>
-							<Route path="/login" element={<LoginandSignup></LoginandSignup>}></Route>
-							{/* <Route path="/forgotPassword" element={<ForgotPassword />} />
+  return (
+    <div className="App">
+      <MantineProvider withNormalizeCSS withGlobalStyles>
+        <NotificationsProvider position="top-right" zIndex={2077}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/add" element={<Adduser></Adduser>}></Route>
+              <Route path="/login" element={<LoginandSignup></LoginandSignup>}></Route>
+              {/* <Route path="/forgotPassword" element={<ForgotPassword />} />
 							<Route path="/resetPassword" element={<ResetPassword />} />
 							<Route path="/OtpVerification" element={<OtpVerification />} />
 							<Route path="/UnVerifiedEmail" element={<UnVerifiedEmail />} /> */}
-						</Routes>
-					</BrowserRouter>
-				</NotificationsProvider>
-			</MantineProvider>
-		</div>
-	);
+            </Routes>
+          </BrowserRouter>
+        </NotificationsProvider>
+      </MantineProvider>
+    </div>
+  );
 }
 
 export default App;
