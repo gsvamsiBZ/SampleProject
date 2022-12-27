@@ -1,3 +1,4 @@
+import Navbar from "./Component/navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./Component/homepage";
 import Insertion from "./Component/tabsForInsertion";
@@ -15,10 +16,12 @@ function App() {
       <MantineProvider withNormalizeCSS withGlobalStyles>
         <NotificationsProvider position="top-right" zIndex={2077}>
           <BrowserRouter>
+            <Navbar />
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/add" element={<Insertion></Insertion>}></Route>
               <Route path="/login" element={<LoginandSignup></LoginandSignup>}></Route>
+              <Route path="/" element={<HomePage />} />
               {/* <Route path="/forgotPassword" element={<ForgotPassword />} />
 							<Route path="/resetPassword" element={<ResetPassword />} />
 							<Route path="/OtpVerification" element={<OtpVerification />} />

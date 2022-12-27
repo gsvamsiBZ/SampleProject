@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import { createStyles, Header, Group, Box, Space, Image, Text } from "@mantine/core"
+import Util from "./Service/util";
 
 
 
@@ -20,7 +21,20 @@ const useStyles = createStyles((theme) => ({
 }))
 
 function Navbar() {
+  const util = new Util();
   const { classes, theme } = useStyles()
+  let [loggedIn, setLoggedIn] = useState(false);
+  let [isAdmin, setIsAdmin] = useState(false);
+
+
+  useEffect(() => {
+    let isLogin = util.loggedIn();
+    setIsAdmin(util.isAdmin());
+    setLoggedIn(isLogin);
+    if (!isLogin && window.location.pathname !== "/login") {
+      window.location.replace("/login");
+    }
+  }, [])
   return (
     <div>
       <Box
@@ -40,26 +54,41 @@ function Navbar() {
         >
           <Group sx={{ height: "100%" }} position="apart">
             <Group sx={{ height: "100%" }}>
-              <Link to="/" className={classes.link}>
+              {loggedIn ? (<Link to="/" className={classes.link}>
                 <Image width={35} height={35} radius={"lg"} fit="contain" src="./logo192.png" />
                 <Space w="xs" />
                 <Text size={"lg"}>
                   {" "}
                   <span style={{ fontWeight: "bold" }}> TrueCaller</span>
                 </Text>
-              </Link>
+              </Link>) :
+                (<>
+                  <Image width={35} height={35} radius={"lg"} fit="contain" src="./logo192.png" />
+                  <Space w="xs" />
+                  <Text size={"lg"}>
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}> TrueCaller</span>
+                  </Text>
+                </>)
+              }
             </Group>
 
             <Group position="center" sx={{ height: "100%" }}  >
-              <Link to="/" className={classes.link}>
-                Home
-              </Link>
-              <Link to="/add" className={classes.link}>
-                Add
-              </Link>
-              <Link to="/submissions" className={classes.link}>
-                Search Users
-              </Link>
+              {loggedIn &&
+                <Link to="/" className={classes.link}>
+                  Home
+                </Link>
+              }
+              {loggedIn &&
+                <Link to="/add" className={classes.link}>
+                  Add
+                </Link>
+              }
+              {loggedIn &&
+                <Link to="/search" className={classes.link}>
+                  Search Users
+                </Link>
+              }
             </Group>
 
 
