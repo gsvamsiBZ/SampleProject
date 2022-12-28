@@ -71,17 +71,19 @@ module.exports.signUp = async (req, res) => {
     let newUser = req.body
     logger.debug("newUser", newUser);
 
-    // checking if there is already an account withis emai
+    // checking if there is already an account with this email
     let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { email: newUser.email })
     if (currentUser) {
-      return res.status(409).json("accoount already exists with " + newUser.email)
+      return res.status(409).json("email")
     }
-    // currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { username: newUser.username })
-    // if (currentUser) {
-    // 	return res.status(409).json("username already exists with " + newUser.username)
-    // }
+
+    //checking if there is already an account with this username
+    currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { username: newUser.username })
+    if (currentUser) {
+      return res.status(409).json("username")
+    }
     let userObj = {
-      // username: newUser.username,
+      username: newUser.username,
       name: newUser.name,
       email: newUser.email,
       // phoneNumber: newUser.phoneNumber,

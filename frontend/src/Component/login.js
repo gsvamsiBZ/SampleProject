@@ -30,7 +30,7 @@ function Login() {
     <div>
       <Container size={420} my={40}>
         <form onSubmit={verify}>
-          <TextInput label="Email" placeholder="you@mantine.dev" required onChange={(e) => setUserEmail(e.target.value)} />
+          <TextInput label="Email or Username" placeholder="Email/Username" required onChange={(e) => setUserEmail(e.target.value)} />
           <PasswordInput label="Password" placeholder="Your password" required mt="md" onChange={(e) => setUserPassword(e.target.value)} />
           <Anchor href="/forgotPassword" size="sm">
             Forgot password?
