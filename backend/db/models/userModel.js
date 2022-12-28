@@ -9,7 +9,7 @@ var userSchema = new mongoose.Schema({
     avatar               : { type: String},
 	role                 : { type: String,  required: true, enum: [ 'admin', 'user'], default: 'user' },
     password             : String,
-    otp                  : String,
+    otp                  : {type :String, default: ""},
     verified             : {type :Boolean, default: false}
 },{timestamps:true});
 

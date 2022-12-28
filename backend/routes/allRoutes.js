@@ -6,6 +6,7 @@ var router = express.Router();
 
 // auth routes
 router.get("/login", authLib.login)
+router.get("/signup/verify", authLib.checkSignupOtp)
 router.post("/signup", authLib.signUp)
 // router.get("/forgotPassword",authLib.forgotPassword)
 
@@ -15,6 +16,6 @@ router.get("/getAllRecordsWithFilterPagination", truecallerUserLib.getAllRecords
 router.get("/getRecordByNumber", truecallerUserLib.getRecordByNumber)
 router.get('/deleteTruecallerUser', truecallerUserLib.deleteTruecallerUser)
 router.post('/insertTruecallerUser', truecallerUserLib.insertTruecallerUser)
-router.post('/insertManyTruecallerUsers',truecallerUserLib.insertManyTruecallerUsers)
+router.post('/insertManyTruecallerUsers', truecallerUserLib.insertManyTruecallerUsers)
 
 module.exports = router;

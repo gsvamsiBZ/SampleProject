@@ -21,6 +21,16 @@
 15) create component folder in frontend/src and create homepage.js in component folder.
 16) Add proxy to frontend/package.json
 ------------------------------------------------
+#### To send notifications through mail 
+1. Add the fromEmail and app password to config
+2. to get the app password for your gmail follow these steps:
+  1. Go to your Google account at https://myaccount.google.com/
+  2. Go to Security
+  3. In "Signing in to Google" section choose 2-Step Verification - here you have to verify yourself. After that you will be able to enabled 2-Step Verification
+  4. Back to Security in "Signing in to Google" section choose App passwords
+  5. From the Select app drop down choose Other (Custom name) and put a name e.g. nodemailer
+  6. A modal dialog will appear with the password. Get that password and use it in your code.
+------------------------------------------------
 ## Steps to set up SSH based authentication:
 - Create a ssh key on your system’s terminal using following command
     - ssh-keygen -t ed25519 -C "your email id"

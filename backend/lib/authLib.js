@@ -27,7 +27,7 @@ const decrypt = (encryptedMessage) => {
   }
 }
 const getOtp = () => {
-  return Math.floor(Math.random() * (99999 - 10000 + 1)) + min;
+  return Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
 }
 
 // function to login 
@@ -48,7 +48,15 @@ module.exports.login = async (req, res) => {
     if (currentUser) {
       //If passwords match creating a web token and sending it in response
       if (decrypt(currentUser.password) == password) {
-        const payload = { _id: currentUser._id, name: currentUser.name, email: currentUser.email, role: currentUser.role }
+        const payload = {
+          _id: currentUser._id,
+          name: currentUser.name,
+          email: currentUser.email,
+          role: currentUser.role,
+          verified: currentUser.verified,
+          otp: currentUser.otp
+        }
+        logger.debug("payload: ", payload)
         let token = jwt.sign(payload, config.jwt_secret, { expiresIn: '24h' });
         return res.json(token)
       }
@@ -82,16 +90,30 @@ module.exports.signUp = async (req, res) => {
     if (currentUser) {
       return res.status(409).json("username")
     }
+    let otp = getOtp()
     let userObj = {
       username: newUser.username,
       name: newUser.name,
       email: newUser.email,
-      // phoneNumber: newUser.phoneNumber,
-      password: encrypt(newUser.password)
+      password: encrypt(newUser.password),
+      otp: otp
     }
     logger.debug("userObj", userObj);
     createdUser = await asyncDbLib.createDocument(userModel, userObj)
-    res.status(201).json("user created")
+    let subject = "OTP for Account Conformation"
+    let message = "Your OTP for verifying your account at FakeCaller is " + otp
+    emailNotificationLib.sendEmail(newUser.email, subject, message)
+    const payload = {
+      _id: createdUser._id,
+      name: createdUser.name,
+      email: createdUser.email,
+      role: createdUser.role,
+      verified: createdUser.verified,
+      otp: createdUser.otp
+    }
+    logger.debug("payload: ", payload)
+    let token = jwt.sign(payload, config.jwt_secret, { expiresIn: '24h' });
+    return res.json(token)
   }
   catch (err) {
     logger.error(err)
@@ -99,95 +121,44 @@ module.exports.signUp = async (req, res) => {
   }
 }
 
+module.exports.checkSignupOtp = async (req, res) => {
+  try {
+    logger.debug(req.query);
+    let email = req.query.email;
+    let otp = req.query.otp
+
+    //finding a user with email and otp
+    let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { email: email, otp: otp })
+    if (currentUser) {
+      //If found marking him as valid and clearing the otp
+      let updatedUser = await asyncDbLib.findOneDocumentByFilterAndUpdate(userModel, { email: email }, { verified: true, otp: "" })
+      logger.debug("updatedUser", updatedUser)
+      const payload = {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        verified: updatedUser.verified,
+        otp: updatedUser.otp
+      }
+      logger.debug("payload: ", payload)
+      let token = jwt.sign(payload, config.jwt_secret, { expiresIn: '24h' });
+      return res.json(token)
+    }
+    else {
+      res.json("Invalid Otp")
+    }
+  }
+  catch (err) {
+    logger.error(err)
+    res.json('error: ' + err)
+  }
+}
+
 // will use these Later
 
-// module.exports.login = async (req, res) => {
-// 	logger.info(req.query);
-// 	try {
-// 		let user = req.query.user
-// 		let password = req.query.password
-// 		let filter = {
-// 			$or: [
-// 				{ username: user },
-// 				{ email: user },
-// 			]
-// 		};
-// 		let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, filter)
-// 		console.log(currentUser)
-// 		if (currentUser) {
-// 			if (currentUser.verified) {
-// 				if (decrypt(currentUser.password) == password) {
-// 					const payload = { _id: currentUser._id, name: currentUser.name, email: currentUser.email, role: currentUser.role }
-// 					let token = jwt.sign(payload, config.jwt_secret, { expiresIn: '24h' });
-// 					return res.json(token)
-// 				}
-// 				else {
-// 					return res.json("Invalid Password")
-// 				}
-// 			}
-// 			else {
-// 				return res.json("Verify your mail first")
-// 			}
-// 		} else {
-// 			res.json("Invalid email or username")
-// 		}
-// 	}
-// 	catch (err) {
-// 		logger.error(err)
-// 		res.json('error: ' + err)
-// 	}
-// }
 
-// module.exports.signUp = async (req, res) => {
-// 	let newUser = req.body
-// 	logger.info("newUser", newUser);
-// 	try {
-// 		let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { email: newUser.email })
-// 		if (currentUser) {
-// 			return res.json("accoount already exists with " + newUser.email)
-// 		}
-// 		currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { username: newUser.username })
-// 		if (currentUser) {
-// 			return res.json("username already exists with " + newUser.username)
-// 		}
-// 		let userObj = {
-// 			username: newUser.username,
-// 			name: newUser.name,
-// 			email: newUser.email,
-// 			phoneNumber: newUser.phoneNumber,
-// 			password: encrypt(newUser.password)
-// 		}
-// 		console.log("userObj", userObj);
-// 		createdUser = await asyncDbLib.createDocument(userModel, userObj)
-// 		logger.debug(createdUser)
-// 		res.json("user created")
-// 	}
-// 	catch (err) {
-// 		logger.error(err)
-// 		res.json('error: ' + err)
-// 	}
-// }
 
-// module.exports.checkSignupOtp = async (req, res) => {
-// 	try {
-// 		logger.info(req.query);
-// 		let email = req.query.email;
-// 		let otp = req.query.otp
-// 		let currentUser = await asyncDbLib.getOneDocumentByFilter(userModel, { email: email, otp: otp })
-// 		if (currentUser) {
-// 			await asyncDbLib.findOneDocumentByFilterAndUpdate(userModel, { email: email }, { verified: true, otp: "" })
-// 			logger.debug(createdUser)
-// 			res.json("otp veriified")
-// 		}
-// 		else {
-// 			res.json("Invalid Otp")
-// 		}
-// 	}
-// 	catch (err) {
-// 		logger.error(err)
-// 		res.json('error: ' + err)
-// 	}
-// }
 
 // module.exports.forgotPassword = async (req, res) => {
 // 	try {
