@@ -11,10 +11,7 @@ function Signup() {
 
   const validatEmail = () => {
     let email = userEmail.trim()
-    if (email.endsWith('@gmail.com') && email.length > 10) {
-      return true
-    }
-    return false
+    return (email.endsWith('@gmail.com') && email.length > 10)
   }
   const createAccount = async (e) => {
     e.preventDefault()
@@ -43,7 +40,6 @@ function Signup() {
         })
         document.getElementById("signUpForm").reset();
       }).catch(err => {
-        console.log("error in signup ", err)
         if (err?.response?.data == "email") {
           showNotification({
             title: "Error",

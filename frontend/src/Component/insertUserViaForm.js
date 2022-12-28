@@ -36,7 +36,7 @@ function Adduser() {
       }
     }
   }
-  function validatemobile(number) {
+  function validateMobile(number) {
     if (number.length != 10) {
       return false
     }
@@ -47,15 +47,9 @@ function Adduser() {
     }
     return true
   }
-  function validateemail(email) {
+  function validateEmail(email) {
     email = email.trim()
-    if (email.length == 0) {
-      return true
-    }
-    if (email.endsWith('@gmail.com') && email.length > 10) {
-      return true
-    }
-    return false
+    return (email.length == 0) || (email.endsWith('@gmail.com') && email.length > 10)
   }
   const form = useForm({
     initialValues: {
@@ -65,8 +59,8 @@ function Adduser() {
       location: ''
     },
     validate: {
-      email: (value) => (validateemail(value) ? null : 'Invalid email'),
-      phone: (value) => (validatemobile(value) ? null : 'Invalid number'),
+      email: (value) => (validateEmail(value) ? null : 'Invalid email'),
+      phone: (value) => (validateMobile(value) ? null : 'Invalid number'),
     },
   });
   return (
